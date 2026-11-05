@@ -311,7 +311,6 @@ html:not(.anim) .scrib path{stroke-dashoffset:0}
 .browser{position:relative}
 .open-chip{position:absolute;right:16px;bottom:16px;padding:10px 16px;border-radius:999px;background:var(--orange);color:#fff;font:600 14px/1 var(--body);opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;box-shadow:0 10px 20px -10px rgba(255,90,31,.8)}
 .browser:hover .open-chip,.browser:focus-visible .open-chip{opacity:1;transform:none}
-.peek iframe{transition:transform 4s cubic-bezier(.4,0,.2,1)}
 @media (hover:none){.open-chip{opacity:1;transform:none}}
 
 /* Manifesto palavra a palavra (ideia da AMEN) */
@@ -807,7 +806,7 @@ document.documentElement.classList.add("anim");
     var w = +el.dataset.w, s = el.clientWidth / w;
     el.style.setProperty("--s", s);
     var f = el.querySelector("iframe");
-    if (f) f.style.height = Math.ceil(el.clientHeight / s * (el.classList.contains("peek") ? 2.6 : 1)) + "px";
+    if (f) f.style.height = Math.ceil(el.clientHeight / s) + "px";
   }
   function load(el){
     if (el.querySelector("iframe")) return;
@@ -904,11 +903,12 @@ document.documentElement.classList.add("anim");
   if("ResizeObserver" in window){ new ResizeObserver(fitLive).observe(live); } else { window.addEventListener("resize", fitLive); }
   fitLive();
 
-  /* Espreitar: ao passar o rato, a pré-visualização desce até meio do site */
+  /* Espreitar: ao passar o rato, a pré-visualização desce suavemente dentro do site */
   document.querySelectorAll(".browser").forEach(function(a){
     var shot=a.querySelector(".peek"); if(!shot) return;
-    a.addEventListener("mouseenter", function(){ var f=shot.querySelector("iframe"); if(!f) return; var s=+getComputedStyle(shot).getPropertyValue("--s")||.5; var dy=-(shot.clientHeight*1.4); f.style.transform="translateY("+dy+"px) scale("+s+")"; });
-    a.addEventListener("mouseleave", function(){ var f=shot.querySelector("iframe"); if(!f) return; f.style.transform=""; });
+    function sc(y){ var f=shot.querySelector("iframe"); if(!f) return; try{ var w=f.contentWindow; w.scrollTo({top:y==="mid"?w.innerHeight*1.1:0,behavior:"smooth"}); }catch(e){} }
+    a.addEventListener("mouseenter", function(){ sc("mid"); });
+    a.addEventListener("mouseleave", function(){ sc(0); });
   });
 
   /* Manifesto: cada palavra acende com o scroll */
