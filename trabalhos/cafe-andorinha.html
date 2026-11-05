@@ -160,6 +160,12 @@ footer a:hover{color:var(--ouro-claro)}
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
 
+
+/* Fotografia do topo a ocupar o ecrã inteiro */
+@media (min-width:961px){
+  .hero img{width:100%;object-position:60% 50%}
+  .hero::after{inset:0;right:0;width:auto;background:linear-gradient(90deg,rgba(18,34,27,.95) 0%,rgba(18,34,27,.88) 40%,rgba(18,34,27,.5) 66%,rgba(18,34,27,.18) 100%),linear-gradient(0deg,rgba(18,34,27,.55),transparent 35%)}
+}
 @media (max-width:960px){
   .top .wrap{grid-template-columns:auto 1fr;height:70px}
   .top nav{display:none}
